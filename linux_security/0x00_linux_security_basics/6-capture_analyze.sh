@@ -1,2 +1,2 @@
 #!/bin/bash
-tcpdump -c 5 -nn -i any
+sudo tcpdump -c 5 -nn -i any
