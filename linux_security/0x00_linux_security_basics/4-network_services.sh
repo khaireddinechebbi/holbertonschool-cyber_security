@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo ss -lnptu
+sudo netstat -platu
