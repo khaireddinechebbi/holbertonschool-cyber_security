@@ -1,1 +1,1 @@
-icmp || ip.proto >= 0 && ip.proto <= 255
+icmp || ip.proto == 1 && ip.proto <= 255
