@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo nmap -sn --script=ip-timestamp $1
+sudo nmap -sn -PP $1
