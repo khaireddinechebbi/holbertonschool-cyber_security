@@ -1,1 +1,1 @@
-udp.dstport and ip.src == <your-subnet>
+udp and ip.src == <your-subnet> and udp.dstport == <target-port>
