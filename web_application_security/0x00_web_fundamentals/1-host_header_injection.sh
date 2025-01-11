@@ -1,2 +1,2 @@
 #!/bin/bash
-curl -s -d $1 $2 $3
+curl -s -X POST $1 $2 $3
