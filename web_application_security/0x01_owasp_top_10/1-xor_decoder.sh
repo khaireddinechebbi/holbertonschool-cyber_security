@@ -11,7 +11,7 @@ if [[ $input == "{xor}"* ]]; then
 fi
 
 # Decode the Base64 string
-e=$(echo "$input" | base64 --decode)
+e=$(echo "$input" | base64 --decode | sed 's/\x00//g')
 
 # Process each character in the decoded string
 seq 0 $((${#e} - 1)) | while read line; do
