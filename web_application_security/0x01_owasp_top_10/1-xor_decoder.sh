@@ -19,4 +19,3 @@ seq 0 $((${#e} - 1)) | while read line; do
     # Print each decoded character followed by a space
     printf "%b" $(printf '\\%03o' $char)
 done
-echo
