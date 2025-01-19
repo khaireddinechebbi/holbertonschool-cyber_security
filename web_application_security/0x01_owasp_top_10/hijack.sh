@@ -4,7 +4,7 @@
 url="http://web0x01.hbtn/a1/hijack_session"
 
 # Output file for cookies
-output_file="cookies.txt"
+output_file="hijak_cookies.txt"
 
 # Clear the output file
 > $output_file
