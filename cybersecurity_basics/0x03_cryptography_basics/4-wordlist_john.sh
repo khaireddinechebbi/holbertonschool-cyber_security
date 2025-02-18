@@ -1,5 +1,2 @@
 #!/bin/bash
-HASH_FILE="$1"
-WORDLIST="/usr/share/wordlists/rockyou.txt"
-john --wordlist="$WORDLIST" --format=raw-md5 "$HASH_FILE"
-john --show "$HASH_FILE" > 4-password.txt
+john --wordlist=/usr/share/wordlists/rockyou.txt --format=raw-md5 "$1" && john --show --format=Raw-MD5 "$1" > 4-password.txt
