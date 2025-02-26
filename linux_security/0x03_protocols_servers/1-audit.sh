@@ -1,2 +1,2 @@
 #!/bin/bash
-grep -vE '^(#|$)' /etc/ssh/sshd_config | while read -r line; do key=$(echo "$line" | awk '{print $1}'); value=$(echo "$line" | cut -d' ' -f2-); [[ -n "$key" && -n "$value" ]] && echo "$key $value"; done
+egrep -v "^#|^$" /etc/ssh/sshd_config
