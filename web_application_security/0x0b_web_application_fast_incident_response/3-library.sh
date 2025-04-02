@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "$(awk '$1 = 54.145.34.34' logs.txt | sort | awk '{print $12}' | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}')"
+awk -v ip="54.145.34.34" '$1 == ip {print $12}' "logs.txt" | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}' | tr -d '"'
