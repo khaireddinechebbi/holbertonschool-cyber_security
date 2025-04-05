@@ -155,7 +155,9 @@ class MemoryEditor:
 
                             # Pad with nulls if replacement is shorter
                             if len(replace_bytes) < len(search_bytes):
-                                padding = len(search_bytes) - len(replace_bytes)
+                                padding = (
+                                  len(search_bytes) - len(replace_bytes)
+                                  )
                                 mem_file.write(b'\x00' * padding)
 
                         result.count += 1
