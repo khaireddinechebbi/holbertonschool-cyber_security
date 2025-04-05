@@ -66,7 +66,8 @@ class MemoryEditor:
             with open(self.maps_path, 'r') as f:
                 pass
         except PermissionError:
-            raise PermissionError(f"Need root privileges to access process {self.pid}")
+            raise PermissionError(f"Need root privileges to \
+            access process {self.pid}")
 
     def locate_heap_regions(self) -> List[Tuple[int, int]]:
         """Find all heap memory regions with write permissions."""
@@ -91,35 +92,45 @@ class MemoryEditor:
     def backup_region(self, start: int, end: int, backup_file: str) -> None:
         """Create backup of memory region."""
         if end - start > MAX_HEAP_SIZE:
-            raise MemoryError(f"Heap region too large ({(end-start)/1024/1024:.2f}MB > {MAX_HEAP_SIZE/1024/1024}MB limit)")
+            raise MemoryError(f"Heap region too large \
+            ({(end-start)/1024/1024:.2f}MB > \
+            {MAX_HEAP_SIZE/1024/1024}MB limit)")
 
         try:
-            with open(self.mem_path, 'rb') as mem_file, open(backup_file, 'wb') as backup:
+            with (
+                open(self.mem_path, 'rb') as mem_file,
+                open(backup_file, 'wb') as backup
+            ):
                 mem_file.seek(start)
                 backup.write(mem_file.read(end - start))
         except Exception as e:
             raise RuntimeError(f"Backup failed: {str(e)}")
 
-    def find_and_replace(self, search_bytes: bytes, replace_bytes: bytes,
-                        replace_all: bool = False, dry_run: bool = False,
-                        backup_prefix: Optional[str] = None) -> ReplacementResult:
+    def find_and_replace(
+      self, search_bytes: bytes, replace_bytes: bytes,
+      replace_all: bool = False, dry_run: bool = False,
+      backup_prefix: Optional[str] = None
+      ) -> ReplacementResult:
         """Main replacement operation with safety checks."""
         if len(replace_bytes) > len(search_bytes):
-            raise ValueError("Replacement string cannot be longer than search string")
+            raise ValueError("Replacement string cannot be longer \
+            than search string")
 
         self.heap_ranges = self.locate_heap_regions()
         result = ReplacementResult(0, [], None)
 
         for start, end in self.heap_ranges:
             region_size = end - start
-            logging.info(f"Scanning heap region 0x{start:x}-0x{end:x} ({region_size} bytes)")
+            logging.info(f"Scanning heap region \
+            0x{start:x}-0x{end:x} ({region_size} bytes)")
 
             try:
                 with open(self.mem_path, 'r+b') as mem_file:
                     # Create backup if requested
                     backup_file = None
                     if backup_prefix:
-                        backup_file = f"{backup_prefix}_{start:x}-{end:x}{BACKUP_EXTENSION}"
+                        backup_file = f"{backup_prefix}_\
+                        {start:x}-{end:x}{BACKUP_EXTENSION}"
                         self.backup_region(start, end, backup_file)
                         result.backup_file = backup_file
 
@@ -144,7 +155,8 @@ class MemoryEditor:
 
                             # Pad with nulls if replacement is shorter
                             if len(replace_bytes) < len(search_bytes):
-                                padding = len(search_bytes) - len(replace_bytes)
+                                padding =
+                                len(search_bytes) - len(replace_bytes)
                                 mem_file.write(b'\x00' * padding)
 
                         result.count += 1
@@ -156,7 +168,8 @@ class MemoryEditor:
                         offset = pos + 1
 
             except Exception as e:
-                logging.error(f"Error processing region 0x{start:x}-0x{end:x}: {str(e)}")
+                logging.error(f"Error processing region \
+                0x{start:x}-0x{end:x}: {str(e)}")
                 if backup_file and os.path.exists(backup_file):
                     os.remove(backup_file)
                 raise
@@ -164,7 +177,9 @@ class MemoryEditor:
         return result
 
 
-def validate_strings(search_str: str, replace_str: str, unicode: bool = False) -> Tuple[bytes, bytes]:
+def validate_strings(
+  search_str: str, replace_str: str, unicode: bool = False
+  ) -> Tuple[bytes, bytes]:
     """Validate and encode strings according to parameters."""
     if not search_str:
         raise ValueError("Search string cannot be empty")
@@ -192,17 +207,44 @@ def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Advanced heap memory string replacement tool",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="Example:\n  sudo %(prog)s --all --backup /tmp/backup 1234 password p@ssw0rd"
+        epilog="Example:\n  sudo %(prog)s --all --backup \
+        /tmp/backup 1234 password p@ssw0rd"
     )
 
-    parser.add_argument("pid", type=int, help="Target process ID")
-    parser.add_argument("search_string", type=str, help="String to search for")
-    parser.add_argument("replace_string", type=str, help="Replacement string")
-    parser.add_argument("--unicode", action="store_true", help="Enable Unicode support")
-    parser.add_argument("--dry-run", action="store_true", help="Simulate without modifying memory")
-    parser.add_argument("--backup", type=str, help="Create memory backup to specified path")
-    parser.add_argument("--verbose", action="store_true", help="Show detailed operation info")
-    parser.add_argument("--all", action="store_true", help="Replace all occurrences (default: first only)")
+    parser.add_argument(
+      "pid", type=int, help="Target process ID"
+      )
+    parser.add_argument(
+      "search_string", type=str, help="String to search for"
+      )
+    parser.add_argument(
+      "replace_string", type=str, help="Replacement string"
+      )
+    parser.add_argument(
+      "--unicode",
+      action="store_true",
+      help="Enable Unicode support"
+      )
+    parser.add_argument(
+      "--dry-run",
+      action="store_true",
+      help="Simulate without modifying memory"
+      )
+    parser.add_argument(
+      "--backup",
+      type=str,
+      help="Create memory backup to specified path"
+      )
+    parser.add_argument(
+      "--verbose",
+      action="store_true",
+      help="Show detailed operation info"
+      )
+    parser.add_argument(
+      "--all",
+      action="store_true",
+      help="Replace all occurrences (default: first only)"
+      )
 
     return parser.parse_args()
 
