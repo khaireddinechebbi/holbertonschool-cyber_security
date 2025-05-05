@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 class CaesarCipher
   def initialize(shift)
     @shift = shift

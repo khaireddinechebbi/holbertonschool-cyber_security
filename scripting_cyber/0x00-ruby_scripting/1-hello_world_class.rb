@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 class HelloWorld
     def initialize
         @message = "Hello, World!"

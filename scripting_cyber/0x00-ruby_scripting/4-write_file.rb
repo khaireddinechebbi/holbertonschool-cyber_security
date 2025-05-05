@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'json'
 
 def merge_json_files(file1_path, file2_path)
