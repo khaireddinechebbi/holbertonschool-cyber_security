@@ -34,14 +34,15 @@ if options[:add]
   File.open(TASK_FILE, 'a') { |f| f.puts options[:add] }
   puts "Task '#{options[:add]}' added."
 elsif options[:list]
-  tasks = File.readlines(TASK_FILE, chomp: true)
-  if tasks.empty?
-    puts "No tasks found."
-  else
-    tasks.each_with_index do |task, index|
-      puts "#{index + 1}. #{task}"
-    end
-  end
+    tasks = File.readlines(TASK_FILE, chomp: true)
+    if tasks.empty?
+      puts "No tasks found."
+    else
+      puts "Tasks:"
+      tasks.each_with_index do |task, index|
+        puts "#{index + 1}. #{task}"
+      end
+    end  
 elsif options[:remove]
   index = options[:remove].to_i
   tasks = File.readlines(TASK_FILE, chomp: true)
